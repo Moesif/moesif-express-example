@@ -20,6 +20,13 @@ var moesifOptions = {
 
   getSessionToken: function (req, res) {
     return req.headers['Authorization'];
+  },
+
+  getMetadata: function (req, res) {
+    return {
+      foo: 'express',
+      bar: 'example'
+    }
   }
 };
 
