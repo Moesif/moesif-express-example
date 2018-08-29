@@ -3,11 +3,12 @@ var bodyParser = require('body-parser');
 var app = express();
 
 var moesifExpress = require('moesif-express');
+var port = process.env.PORT || 5000
 
 // Set the options, the only required field is applicationId.
 var moesifOptions = {
 
-  applicationId: 'your application id',
+  applicationId: process.env.MOESIF_APPLICATION_ID || 'SET ME',
 
   debug: true,
 
@@ -47,6 +48,6 @@ router.get('/', function(req, res) {
 
 app.use('/api', router);
 
-app.listen(3000, function() {
-  console.log('Example app is listening on port 3000');
+app.listen(port, function() {
+  console.log('Example app is listening on port ' + port);
 });

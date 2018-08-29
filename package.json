@@ -1,9 +1,14 @@
 {
   "name": "moesif-express-example",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An example for using moesif-express middleware",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/moesif/moesif-express-example"
+  },
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "mocha"
   },
   "keywords": [
@@ -15,6 +20,9 @@
   "dependencies": {
     "express": "^4.15.3",
     "lodash": "^4.17.4",
-    "moesif-express": "^2.4.0"
+    "moesif-express": "^2.5.0"
+  },
+  "engines": {
+    "node": "8.9.1"
   }
 }
