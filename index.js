@@ -45,7 +45,7 @@ app.get('/', function (req, res) {
 app.post('/multipart', function (req, res) {
   console.log('inside multi part');
   console.log(req.body);
-  res.send('helo');
+  res.send('received');
 });
 
 var router = express.Router();
@@ -57,7 +57,7 @@ router.get('/', function(req, res) {
 
 router.post('/large', function(req, res) {
   console.log(req.body);
-  res.json({ message: 'post sessessful'})
+  res.json({ message: 'post successful'})
 });
 
 
