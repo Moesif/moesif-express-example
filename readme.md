@@ -4,9 +4,9 @@
 
 [Moesif](https://www.moesif.com) is an API analytics platform.
 [moesif-express](https://github.com/Moesif/moesif-express)
-is a middleware that makes integration with Moesif easy for Express or even Node based web apps. 
+is a middleware that makes integration with Moesif easy for Express or even Node based web apps.
 
-This example is an example express application with Moesif-Express integrated. 
+This example is an example express application with Moesif-Express integrated.
 
 
 ## How to run this example.

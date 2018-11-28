@@ -20,7 +20,7 @@
   "dependencies": {
     "express": "^4.15.3",
     "lodash": "^4.17.4",
-    "moesif-express": "^2.5.0"
+    "moesif-express": "^2.6.6"
   },
   "engines": {
     "node": "8.9.1"
