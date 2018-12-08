@@ -37,6 +37,12 @@ var moesifOptions = {
 
   batchMaxTime: 20000,
 
+  callback: function (error, data) {
+    console.log('inside call back');
+    console.log(JSON.stringify(error));
+    console.log(JSON.stringify(data));
+  }
+
   // samplingPercentage: 100
 };
 
@@ -46,7 +52,9 @@ app.use(bodyParser.text({type: 'text/plain'}))
 
 console.log
 var moesifMiddleware = moesifExpress(moesifOptions);
+
 app.use(moesifMiddleware);
+moesifMiddleware.startCaptureOutgoing();
 
 app.get('/', function (req, res) {
   res.send('hello world!');
@@ -91,4 +99,4 @@ app.listen(port, function() {
 });
 
 
-moesifMiddleware.startCaptureOutgoing();
+
