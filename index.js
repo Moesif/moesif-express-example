@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
+var superagent = require('superagent');
 
 var moesifExpress = require('moesif-express');
 var port = process.env.PORT || 5000
@@ -30,13 +31,22 @@ var moesifOptions = {
     }
   },
 
+  // disableBatching: true,
+
+  batchSize: 3,
+
+  batchMaxTime: 20000,
+
   // samplingPercentage: 100
 };
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({limit: '50mb', extended: true}));
 app.use(bodyParser.text({type: 'text/plain'}))
-app.use(moesifExpress(moesifOptions));
+
+console.log
+var moesifMiddleware = moesifExpress(moesifOptions);
+app.use(moesifMiddleware);
 
 app.get('/', function (req, res) {
   res.send('hello world!');
@@ -61,8 +71,24 @@ router.post('/large', function(req, res) {
 });
 
 
+router.get('/outgoing/posts', function(req, res) {
+  console.log('outgoing is called');
+  superagent.get('https://jsonplaceholder.typicode.com/todos/2').then(function (response) {
+    console.log('back from outoging');
+    console.log(response.body);
+    res.json({ fromTypicode: response.body });
+  }).catch(function(err) {
+    res.status(500).json(err);
+  });
+});
+
+// router.get('/outgoing/')
+
 app.use('/api', router);
 
 app.listen(port, function() {
   console.log('Example app is listening on port ' + port);
 });
+
+
+moesifMiddleware.startCaptureOutgoing();
