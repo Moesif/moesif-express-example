@@ -9,7 +9,7 @@ var port = process.env.PORT || 5000
 // Set the options, the only required field is applicationId.
 var moesifOptions = {
 
-  applicationId: process.env.MOESIF_APPLICATION_ID || 'your application id from moesif',
+  applicationId: process.env.MOESIF_APPLICATION_ID || 'your application id from moesif.',
 
   debug: true,
 
