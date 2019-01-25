@@ -4,12 +4,14 @@ var app = express();
 var superagent = require('superagent');
 
 var moesifExpress = require('moesif-express');
+var httpProxy = require('http-proxy');
+
 var port = process.env.PORT || 5000
 
 // Set the options, the only required field is applicationId.
 var moesifOptions = {
 
-  applicationId: process.env.MOESIF_APPLICATION_ID || 'your application id from moesif.',
+  applicationId: process.env.MOESIF_APPLICATION_ID || 'your application id from moesif',
 
   debug: true,
 
@@ -31,24 +33,21 @@ var moesifOptions = {
     }
   },
 
-  // disableBatching: true,
+  disableBatching: true,
 
-  batchSize: 3,
+  // batchSize: 3,
 
-  batchMaxTime: 20000,
+  // batchMaxTime: 20000,
 
   callback: function (error, data) {
     console.log('inside call back');
-    console.log(JSON.stringify(error));
-    console.log(JSON.stringify(data));
+    console.log('error: ' + JSON.stringify(error));
   }
 
   // samplingPercentage: 100
 };
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json({limit: '50mb', extended: true}));
-app.use(bodyParser.text({type: 'text/plain'}))
+
 
 var moesifMiddleware = moesifExpress(moesifOptions);
 
@@ -67,10 +66,13 @@ app.post('/multipart', function (req, res) {
 
 var router = express.Router();
 
+router.use(bodyParser.urlencoded({ extended: true }));
+router.use(bodyParser.json({limit: '50mb', extended: true}));
+router.use(bodyParser.text({type: 'text/plain'}))
+
 router.get('/', function(req, res) {
   res.json({ message: 'first json api'});
 });
-
 
 router.post('/large', function(req, res) {
   console.log(req.body);
@@ -89,12 +91,44 @@ router.get('/outgoing/posts', function(req, res) {
   });
 });
 
+/**
+ * Example proxy section.
+ */
+
+var proxyRoute = express.Router();
+
+
+const proxy = httpProxy.createProxyServer();
+
+proxy.on('error', (error, req, res) => {
+  if (error.code !== 'ECONNRESET') {
+    console.error('proxy error', error);
+  }
+  if (!res.headersSent) {
+    res.writeHead(500, { 'content-type': 'application/json' });
+  }
+
+  const json = { error: 'proxy_error', reason: error.message };
+  res.end(JSON.stringify(json));
+});
+
+
+proxyRoute.use('/', (req, res) => {
+  proxy.web(req, res, {
+    target: 'http://jsonplaceholder.typicode.com',
+    ws: false,
+    changeOrigin: true,
+  });
+});
+
 
 app.use('/api', router);
+
+app.use('/proxy', proxyRoute);
+
 
 app.listen(port, function() {
   console.log('Example app is listening on port ' + port);
 });
-
 
 
