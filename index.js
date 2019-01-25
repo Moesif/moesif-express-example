@@ -50,7 +50,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({limit: '50mb', extended: true}));
 app.use(bodyParser.text({type: 'text/plain'}))
 
-console.log
 var moesifMiddleware = moesifExpress(moesifOptions);
 
 app.use(moesifMiddleware);
@@ -90,7 +89,6 @@ router.get('/outgoing/posts', function(req, res) {
   });
 });
 
-// router.get('/outgoing/')
 
 app.use('/api', router);
 
