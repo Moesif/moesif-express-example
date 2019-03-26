@@ -13,11 +13,21 @@ var moesifOptions = {
 
   applicationId: process.env.MOESIF_APPLICATION_ID || 'your application id from moesif',
 
-  debug: true,
+  debug: false,
 
   identifyUser: function (req, res) {
     if (req.user) {
       return req.user.id;
+    }
+    if (req.headers['my-user-id']) {
+      return req.headers['my-user-id'];
+    }
+    return undefined;
+  },
+
+  identifyCompany: function (req, res) {
+    if (req.headers['my-company-id']) {
+      return req.headers['my-company-id'];
     }
     return undefined;
   },
@@ -88,6 +98,37 @@ router.get('/outgoing/posts', function(req, res) {
     res.json({ fromTypicode: response.body });
   }).catch(function(err) {
     res.status(500).json(err);
+  });
+});
+
+router.post('/users(/:userId)', function(req, res) {
+  // updateUser and updateCompany can be called anywhere in the node
+  // this is just an example it can be easily triggered by the
+  // test script.
+  moesifMiddleware.updateUser({
+    userId: req.params.userId,
+    metadata: req.body
+  }, function(err) {
+    if (err) {
+      console.log('update user error');
+      console.log(err);
+      res.status(500).end();
+    }
+    res.status(202).json({ status: 'ok' });
+  });
+});
+
+router.post('/companies(/:companyId)', function(req, res) {
+  moesifMiddleware.updateCompany({
+    companyId: req.params.companyId,
+    metadata: req.body
+  }, function(err) {
+    if (err) {
+      console.log('update company error');
+      console.log(err);
+      res.status(500).end();
+    }
+    res.status(202).json({ status: 'ok' });
   });
 });
 

@@ -25,5 +25,4 @@ var moesifOptions = {
 
 6. To run: `$ node index.js`
 
-7. Send some requests to some of the routes and verify that the API calls are captured in
-your Moesif account.
+7. Send some requests to some of the routes and verify that the API calls are captured in your Moesif account. Or if you have the `node index.js` running, you can also run `npm test` to run some API calls against the example server.
