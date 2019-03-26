@@ -9,20 +9,16 @@ var userIdHeader = 'my-user-id';
 var companyIdHeader = 'my-company-id';
 
 describe('Testing basic api call', function() {
-  it('test with basic json get with user u01', function() {
+  it('test updating a company profile for acme1', function() {
     return superagent
-      .get(apiEndPoint + '/api')
-      .set(userIdHeader, 'u01')
-      .set(companyIdHeader, 'acme1')
-      .then(() => {});
+      .post(apiEndPoint + '/api/companies/acme1')
+      .send({ company_domain: 'acme1.com', num_employees: 2000, category: 'space' });
   });
 
-  it('test with basic json get with user u02', function() {
+  it('test updating a company profile for acme2', function() {
     return superagent
-      .get(apiEndPoint + '/api')
-      .set(userIdHeader, 'u02')
-      .set(companyIdHeader, 'acme1')
-      .then(() => {});
+    .post(apiEndPoint + '/api/companies/acme2')
+    .send({ company_domain: 'acme2.com', num_employees: 220, category: 'earth' });
   });
 
   it('test with basic json get with user u03', function() {
@@ -54,15 +50,19 @@ describe('Testing basic api call', function() {
       .send({ email: 'alice+3@acme1.com', name: 'alice 1', p1: 'one', p2: 'two' });
   });
 
-  it('test updating a company profile for acme1', function() {
+  it('test with basic json get with user u01', function() {
     return superagent
-      .post(apiEndPoint + '/api/companies/acme1')
-      .send({ companyDomain: 'acme1.com', numEmployees: 2000, category: 'space' });
+      .get(apiEndPoint + '/api')
+      .set(userIdHeader, 'u01')
+      .set(companyIdHeader, 'acme1')
+      .then(() => {});
   });
 
-  it('test updating a company profile for acme2', function() {
+  it('test with basic json get with user u02', function() {
     return superagent
-    .post(apiEndPoint + '/api/companies/acme2')
-    .send({ companyDomain: 'acme2.com', numEmployees: 220, category: 'earth' });
+      .get(apiEndPoint + '/api')
+      .set(userIdHeader, 'u02')
+      .set(companyIdHeader, 'acme1')
+      .then(() => {});
   });
 });
