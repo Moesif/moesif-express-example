@@ -3,6 +3,8 @@ var bodyParser = require('body-parser');
 var app = express();
 var superagent = require('superagent');
 
+// process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
+
 var moesifExpress = require('moesif-express');
 var httpProxy = require('http-proxy');
 
@@ -27,6 +29,7 @@ var moesifOptions = {
 
   identifyCompany: function (req, res) {
     if (req.headers['my-company-id']) {
+
       return req.headers['my-company-id'];
     }
     return undefined;
@@ -49,14 +52,13 @@ var moesifOptions = {
 
   // batchMaxTime: 20000,
 
+  // baseUri: `https://api.dev.moesif.net`,
+
   callback: function (error, data) {
     console.log('inside call back');
     console.log('error: ' + JSON.stringify(error));
   }
-
-  // samplingPercentage: 100
 };
-
 
 
 var moesifMiddleware = moesifExpress(moesifOptions);
@@ -171,5 +173,3 @@ app.use('/proxy', proxyRoute);
 app.listen(port, function() {
   console.log('Example app is listening on port ' + port);
 });
-
-

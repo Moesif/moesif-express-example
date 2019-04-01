@@ -153,3 +153,5 @@ $RECYCLE.BIN/
 
 ### Less ###
 *.css
+
+.vscode
