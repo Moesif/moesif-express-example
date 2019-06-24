@@ -104,7 +104,7 @@ router.get('/outgoing/posts', function(req, res) {
 });
 
 router.post('/users(/:userId)', function(req, res) {
-  // updateUser and updateUser can be called anywhere in the node
+  // updateUser can be called anywhere in the node
   // this is just an example it can be easily triggered by the
   // test script.
   moesifMiddleware.updateUser({
