@@ -104,7 +104,7 @@ router.get('/outgoing/posts', function(req, res) {
 });
 
 router.post('/users(/:userId)', function(req, res) {
-  // updateUser and updateCompany can be called anywhere in the node
+  // updateUser can be called anywhere in the node
   // this is just an example it can be easily triggered by the
   // test script.
   moesifMiddleware.updateUser({
@@ -123,6 +123,7 @@ router.post('/users(/:userId)', function(req, res) {
 router.post('/companies(/:companyId)', function(req, res) {
   moesifMiddleware.updateCompany({
     companyId: req.params.companyId,
+    companyDomain: 'acmeinc.com',
     metadata: req.body
   }, function(err) {
     if (err) {
