@@ -48,11 +48,11 @@ var moesifOptions = {
 
   disableBatching: true,
 
+  logBody: true,
+
   // batchSize: 3,
 
   // batchMaxTime: 20000,
-
-  // baseUri: `https://api.dev.moesif.net`,
 
   callback: function (error, data) {
     console.log('inside call back');
