@@ -6,23 +6,42 @@
 [moesif-express](https://github.com/Moesif/moesif-express)
 is a middleware that makes integration with Moesif easy for Express or even Node based web apps.
 
-This example is an example express application with Moesif-Express integrated.
+This example is an express application with Moesif's API analytics and monitoring integrated.
 
 
 ## How to run this example.
 
-1. Install all dependencies: `$ npm install`
+1. Install all dependencies: 
 
-2. Be sure to edit the `index.js` to change the application id to your
-application id obtained from Moesif.
-
+```bash
+npm install
 ```
+
+2. Add your Moesif Application Id to the `index.js`
+
+Your Moesif Application Id can be found in the [_Moesif Portal_](https://www.moesif.com/).
+After signing up for a Moesif account, your Moesif Application Id will be displayed during the onboarding steps. 
+
+You can always find your Moesif Application Id at any time by logging 
+into the [_Moesif Portal_](https://www.moesif.com/), click on the top right menu,
+and then clicking _Installation_.
+
+```javascript
 var moesifOptions = {
   applicationId: 'your application id',
-
 }
 ```
 
-6. To run: `$ node index.js`
+6. Run the example, it will listen on port 5000.
 
-7. Send some requests to some of the routes and verify that the API calls are captured in your Moesif account. Or if you have the `node index.js` running, you can also run `npm test` to run some API calls against the example server.
+```bash
+node index.js
+```
+
+7. Send some requests to some of the routes and verify that the API calls are captured in your Moesif account. 
+
+```bash
+curl http://localhost:5000
+```
+
+If you have the `node index.js` running, you can also run `npm test` to automatically trigger some API calls against the example server.
