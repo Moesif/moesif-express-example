@@ -20,7 +20,7 @@
   "dependencies": {
     "express": "^4.15.3",
     "http-proxy": "^1.17.0",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.13",
     "moesif-express": "2.9.12",
     "superagent": "^4.0.0"
   },
