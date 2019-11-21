@@ -109,7 +109,8 @@ router.post('/users(/:userId)', function(req, res) {
   // test script.
   moesifMiddleware.updateUser({
     userId: req.params.userId,
-    metadata: req.body
+    metadata: req.body,
+    campaign: { utmSource: 'Newsletter', utmMedium: 'Email'}
   }, function(err) {
     if (err) {
       console.log('update user error');
@@ -124,7 +125,8 @@ router.post('/companies(/:companyId)', function(req, res) {
   moesifMiddleware.updateCompany({
     companyId: req.params.companyId,
     companyDomain: 'acmeinc.com',
-    metadata: req.body
+    metadata: req.body,
+    campaign: { utmSource: 'Adwords', utmMedium: 'Twitter'}
   }, function(err) {
     if (err) {
       console.log('update company error');
