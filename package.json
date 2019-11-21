@@ -18,11 +18,11 @@
   "author": "Xing Wang",
   "license": "Apache-2.0",
   "dependencies": {
-    "express": "^4.15.3",
-    "http-proxy": "^1.17.0",
-    "lodash": "^4.17.13",
-    "moesif-express": "2.9.12",
-    "superagent": "^4.0.0"
+    "express": "^4.17.1",
+    "http-proxy": "^1.18.0",
+    "lodash": "^4.17.15",
+    "moesif-express": "2.9.13",
+    "superagent": "^5.1.1"
   },
   "engines": {
     "node": "8.9.1"
