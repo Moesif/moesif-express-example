@@ -28,7 +28,7 @@ describe('Testing basic api call', function() {
       .then(() => {});
   });
 
-  it('tests updating a user profile for u01', function() {
+  it('tests updating a user profile for u02', function() {
     return superagent
       .post(apiEndPoint + '/api/users/u02')
       .send({ email: 'steve+2@acme1.com', name: 'stev3', first_name: 'blah', lastName: 'hello' })
