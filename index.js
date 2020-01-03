@@ -13,7 +13,7 @@ var port = process.env.PORT || 5000
 // Set the options, the only required field is applicationId.
 var moesifOptions = {
 
-  applicationId: process.env.MOESIF_APPLICATION_ID || 'your application id from moesif',
+  applicationId: process.env.MOESIF_APPLICATION_ID || 'Your Moesif Application Id',
 
   debug: false,
 
@@ -107,33 +107,79 @@ router.post('/users(/:userId)', function(req, res) {
   // updateUser can be called anywhere in the node
   // this is just an example it can be easily triggered by the
   // test script.
-  moesifMiddleware.updateUser({
+
+  // Only userId is required.
+  // Campaign object is optional, but useful if you want to track ROI of acquisition channels
+  // See https://www.moesif.com/docs/api#users for campaign schema
+  // metadata can be any custom object
+  var user = {
     userId: req.params.userId,
-    metadata: req.body,
-    campaign: { utmSource: 'Newsletter', utmMedium: 'Email'}
-  }, function(err) {
+    companyId: '67890', // If set, associate user with a company object
+    campaign: {
+      utmSource: 'google',
+      utmMedium: 'cpc', 
+      utmCampaign: 'adwords',
+      utmTerm: 'api+tooling',
+      utmContent: 'landing'
+    },
+    metadata: {
+      email: 'john@acmeinc.com',
+      firstName: 'John',
+      lastName: 'Doe',
+      title: 'Software Engineer',
+      salesInfo: {
+          stage: 'Customer',
+          lifetimeValue: 24000,
+          accountOwner: 'mary@contoso.com'
+      }
+    }
+  };
+
+  moesifMiddleware.updateUser(user, function(err) {
     if (err) {
       console.log('update user error');
       console.log(err);
       res.status(500).end();
     }
-    res.status(202).json({ status: 'ok' });
+    res.status(201).json({ user_updated: true });
   });
 });
 
 router.post('/companies(/:companyId)', function(req, res) {
-  moesifMiddleware.updateCompany({
+  
+  // Only companyId is required.
+  // Campaign object is optional, but useful if you want to track ROI of acquisition channels
+  // See https://www.moesif.com/docs/api#update-a-company for campaign schema
+  // metadata can be any custom object
+  var company = {
     companyId: req.params.companyId,
-    companyDomain: 'acmeinc.com',
-    metadata: req.body,
-    campaign: { utmSource: 'Adwords', utmMedium: 'Twitter'}
-  }, function(err) {
+    companyDomain: 'acmeinc.com', // If domain is set, Moesif will enrich your profiles with publicly available info 
+    campaign: { 
+      utmSource: 'google',
+      utmMedium: 'cpc', 
+      utmCampaign: 'adwords',
+      utmTerm: 'api+tooling',
+      utmContent: 'landing'
+    },
+    metadata: {
+      orgName: 'Acme, Inc',
+      planName: 'Free Plan',
+      dealStage: 'Lead',
+      mrr: 24000,
+      demographics: {
+        alexaRanking: 500000,
+        employeeCount: 47
+      }
+    }
+  };
+  
+  moesifMiddleware.updateCompany(company, function(err) {
     if (err) {
       console.log('update company error');
       console.log(err);
       res.status(500).end();
     }
-    res.status(202).json({ status: 'ok' });
+    res.status(201).json({ company_updated: true });
   });
 });
 
