@@ -3,8 +3,8 @@
 [Express](https://expressjs.com) is very popular web framework for node.js.
 
 [Moesif](https://www.moesif.com) is an API analytics platform.
-[moesif-express](https://github.com/Moesif/moesif-express)
-is a middleware that makes integration with Moesif easy for Express or even Node based web apps.
+[moesif-nodejs](https://github.com/Moesif/moesif-nodejs)
+is a middleware that makes integration with Moesif easy for Nodejs based apps including Express.
 
 This example is an express application with Moesif's API analytics and monitoring integrated.
 
