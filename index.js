@@ -5,7 +5,7 @@ var superagent = require('superagent');
 
 // process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
 
-var moesifExpress = require('moesif-express');
+var moesif = require('moesif-nodejs');
 var httpProxy = require('http-proxy');
 
 var port = process.env.PORT || 5000
@@ -61,7 +61,7 @@ var moesifOptions = {
 };
 
 
-var moesifMiddleware = moesifExpress(moesifOptions);
+var moesifMiddleware = moesif(moesifOptions);
 
 app.use(moesifMiddleware);
 moesifMiddleware.startCaptureOutgoing();
