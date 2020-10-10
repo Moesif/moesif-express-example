@@ -15,7 +15,7 @@ var moesifOptions = {
 
   applicationId: process.env.MOESIF_APPLICATION_ID || 'Your Moesif Application Id',
 
-  debug: false,
+  debug: true,
 
   identifyUser: function (req, res) {
     if (req.user) {
@@ -47,12 +47,6 @@ var moesifOptions = {
   },
 
   disableBatching: true,
-
-  logBody: true,
-
-  // batchSize: 3,
-
-  // batchMaxTime: 20000,
 
   callback: function (error, data) {
     console.log('inside call back');
@@ -103,93 +97,12 @@ router.get('/outgoing/posts', function(req, res) {
   });
 });
 
-router.post('/users(/:userId)', function(req, res) {
-  // updateUser can be called anywhere in the node
-  // this is just an example it can be easily triggered by the
-  // test script.
-
-  // Only userId is required.
-  // Campaign object is optional, but useful if you want to track ROI of acquisition channels
-  // See https://www.moesif.com/docs/api#users for campaign schema
-  // metadata can be any custom object
-  var user = {
-    userId: req.params.userId,
-    companyId: '67890', // If set, associate user with a company object
-    campaign: {
-      utmSource: 'google',
-      utmMedium: 'cpc', 
-      utmCampaign: 'adwords',
-      utmTerm: 'api+tooling',
-      utmContent: 'landing'
-    },
-    metadata: {
-      email: 'john@acmeinc.com',
-      firstName: 'John',
-      lastName: 'Doe',
-      title: 'Software Engineer',
-      salesInfo: {
-          stage: 'Customer',
-          lifetimeValue: 24000,
-          accountOwner: 'mary@contoso.com'
-      }
-    }
-  };
-
-  moesifMiddleware.updateUser(user, function(err) {
-    if (err) {
-      console.log('update user error');
-      console.log(err);
-      res.status(500).end();
-    }
-    res.status(201).json({ user_updated: true });
-  });
-});
-
-router.post('/companies(/:companyId)', function(req, res) {
-  
-  // Only companyId is required.
-  // Campaign object is optional, but useful if you want to track ROI of acquisition channels
-  // See https://www.moesif.com/docs/api#update-a-company for campaign schema
-  // metadata can be any custom object
-  var company = {
-    companyId: req.params.companyId,
-    companyDomain: 'acmeinc.com', // If domain is set, Moesif will enrich your profiles with publicly available info 
-    campaign: { 
-      utmSource: 'google',
-      utmMedium: 'cpc', 
-      utmCampaign: 'adwords',
-      utmTerm: 'api+tooling',
-      utmContent: 'landing'
-    },
-    metadata: {
-      orgName: 'Acme, Inc',
-      planName: 'Free Plan',
-      dealStage: 'Lead',
-      mrr: 24000,
-      demographics: {
-        alexaRanking: 500000,
-        employeeCount: 47
-      }
-    }
-  };
-  
-  moesifMiddleware.updateCompany(company, function(err) {
-    if (err) {
-      console.log('update company error');
-      console.log(err);
-      res.status(500).end();
-    }
-    res.status(201).json({ company_updated: true });
-  });
-});
 
 /**
- * Example proxy section.
+ * Example using http-proxy.
  */
 
 var proxyRoute = express.Router();
-
-
 const proxy = httpProxy.createProxyServer();
 
 proxy.on('error', (error, req, res) => {
