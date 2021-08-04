@@ -4,9 +4,9 @@ var app = express();
 var superagent = require('superagent');
 
 // process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
+var httpProxy = require('http-proxy');
 
 var moesif = require('moesif-nodejs');
-var httpProxy = require('http-proxy');
 
 var port = process.env.PORT || 5000
 
@@ -46,7 +46,11 @@ var moesifOptions = {
     }
   },
 
+  // batchMaxTime: 10000,
+  // batchSize: 15,
   disableBatching: true,
+
+  // responseMaxBodySize: 5000,
 
   callback: function (error, data) {
     console.log('inside call back');
@@ -61,6 +65,7 @@ app.use(moesifMiddleware);
 moesifMiddleware.startCaptureOutgoing();
 
 app.get('/', function (req, res) {
+  console.log(req.body);
   res.send('hello world!');
 });
 
@@ -70,21 +75,35 @@ app.post('/multipart', function (req, res) {
   res.send('received');
 });
 
+app.get('/large-string-response', function(req, res) {
+  var really_long_string = (new Array(10001)).join("x");
+  res.send(really_long_string);
+});
+
+// router are prefaced by /api
+// and uses bodyParser
 var router = express.Router();
 
 router.use(bodyParser.urlencoded({ extended: true }));
-router.use(bodyParser.json({limit: '50mb', extended: true}));
+router.use(express.json({limit: '50mb', extended: true}));
 router.use(bodyParser.text({type: 'text/plain'}))
 
 router.get('/', function(req, res) {
+  console.log('req body in customer api');
+  console.log(req.body);
   res.json({ message: 'first json api'});
 });
 
 router.post('/large', function(req, res) {
+  console.log('req body in customer api');
   console.log(req.body);
   res.json({ message: 'post successful'})
 });
 
+router.get('/large-object-response', function(req, res) {
+  var reallyBigArray = (new Array(10001)).fill('hi');
+  res.json(reallyBigArray);
+});
 
 router.get('/outgoing/posts', function(req, res) {
   console.log('outgoing is called');
@@ -96,7 +115,6 @@ router.get('/outgoing/posts', function(req, res) {
     res.status(500).json(err);
   });
 });
-
 
 /**
  * Example using http-proxy.
