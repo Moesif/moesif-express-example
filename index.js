@@ -50,7 +50,8 @@ var moesifOptions = {
   // batchSize: 15,
   disableBatching: true,
 
-  // responseMaxBodySize: 5000,
+  // modify the option below to test out limits for responseMaxBodySize
+  responseMaxBodySize: 5000,
 
   callback: function (error, data) {
     console.log('inside call back');
