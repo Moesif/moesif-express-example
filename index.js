@@ -8,6 +8,9 @@ var httpProxy = require('http-proxy');
 
 var moesif = require('moesif-nodejs');
 
+// when testing locally:
+// var moesif = require('../moesif-nodejs/lib/index');
+
 var port = process.env.PORT || 5000
 
 // Set the options, the only required field is applicationId.
@@ -16,6 +19,7 @@ var moesifOptions = {
   applicationId: process.env.MOESIF_APPLICATION_ID || 'Your Moesif Application Id',
 
   debug: true,
+  // debug: 'instrumentation',
 
   identifyUser: function (req, res) {
     if (req.user) {
@@ -66,14 +70,48 @@ app.use(moesifMiddleware);
 moesifMiddleware.startCaptureOutgoing();
 
 app.get('/', function (req, res) {
+  console.log('the api do not attempt to read body at all');
   console.log(req.body);
   res.send('hello world!');
 });
 
+app.get('/request-read-test', function (req, res) {
+  console.log('the api tries to use stream.read to read body.');
+  var body = req.read();
+  console.log(body);
+  res.send('hello world! received' + body);
+});
+
+app.post('/request-on-readable-test', function (req, res) {
+  var reqBodyRaw;
+  req.on('readable', () => {
+    reqBodyRaw = reqBodyRaw + req.read();
+  });
+  req.on('end', () => {
+    res.send('hello received ' + reqBodyRaw);
+  });
+});
+
+app.post('/on-data-test', function (req, res) {
+  let reqBodyRaw = '';
+  req.on('data', (chunk) => {
+    reqBodyRaw = reqBodyRaw + chunk;
+  });
+
+  req.on('end', () => {
+    res.send('service received' + reqBodyRaw);
+  });
+});
+
 app.post('/multipart', function (req, res) {
-  console.log('inside multi part');
-  console.log(req.body);
-  res.send('received');
+  let reqBodyRaw = '';
+  req.on('data', (chunk) => {
+    reqBodyRaw = reqBodyRaw + chunk;
+  });
+
+  req.on('end', () => {
+    res.send('service received' + reqBodyRaw);
+  });
 });
 
 app.get('/large-string-response', function(req, res) {
@@ -86,7 +124,7 @@ app.get('/large-string-response', function(req, res) {
 var router = express.Router();
 
 router.use(bodyParser.urlencoded({ extended: true }));
-router.use(express.json({limit: '50mb', extended: true}));
+router.use(bodyParser.json({limit: '50mb', extended: true}));
 router.use(bodyParser.text({type: 'text/plain'}))
 
 router.get('/', function(req, res) {
