@@ -1,4 +1,4 @@
-
+see
 # Created by https://www.gitignore.io/api/intellij,node,osx,windows,less
 
 ### Intellij ###
@@ -44,7 +44,7 @@ atlassian-ide-plugin.xml
 
 # Crashlytics plugin (for Android Studio and IntelliJ)
 com_crashlytics_export_strings.xml
-crashlytics.properties
+crashlytics.properties 
 crashlytics-build.properties
 fabric.properties
 
@@ -144,7 +144,7 @@ $RECYCLE.BIN/
 # Windows Installer files
 *.cab
 *.msi
-*.msm
+*.msm t
 *.msp
 
 # Windows shortcuts
