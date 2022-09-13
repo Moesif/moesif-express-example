@@ -8,12 +8,12 @@ var httpProxy = require('http-proxy');
 
 var moesif = require('moesif-nodejs');
 
-var port = process.env.PORT || 5000
+var port = process.env.PORT || 7500;
 
 // Set the options, the only required field is applicationId.
 var moesifOptions = {
 
-  applicationId: process.env.MOESIF_APPLICATION_ID || 'Your Moesif Application Id',
+  applicationId: process.env.MOESIF_APPLICATION_ID || 'Your Application Id',
 
   debug: true,
 
@@ -46,12 +46,17 @@ var moesifOptions = {
     }
   },
 
+
+  baseUri: 'https://api-dev.moesif.net',
+
   // batchMaxTime: 10000,
   // batchSize: 15,
   disableBatching: true,
 
   // modify the option below to test out limits for responseMaxBodySize
   responseMaxBodySize: 5000,
+
+  requestMaxBodySize: 100000,
 
   callback: function (error, data) {
     console.log('inside call back');
@@ -75,6 +80,7 @@ app.post('/multipart', function (req, res) {
   console.log(req.body);
   res.send('received');
 });
+
 
 app.get('/large-string-response', function(req, res) {
   var really_long_string = (new Array(10001)).join("x");
