@@ -2,24 +2,30 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 var superagent = require('superagent');
+var _ = require('lodash');
 
-// process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
 var httpProxy = require('http-proxy');
 
 var moesif = require('moesif-nodejs');
 
-var port = process.env.PORT || 5000
+
+var port = process.env.PORT || 5050
 
 // Set the options, the only required field is applicationId.
 var moesifOptions = {
 
   applicationId: process.env.MOESIF_APPLICATION_ID || 'Your Moesif Application Id',
 
+  baseUri: 'https://api.moesif.net',
+
   debug: true,
 
   identifyUser: function (req, res) {
     if (req.user) {
       return req.user.id;
+    }
+    if (req.headers['x-user-id']) {
+      return req.headers['x-user-id'];
     }
     if (req.headers['my-user-id']) {
       return req.headers['my-user-id'];
@@ -28,8 +34,10 @@ var moesifOptions = {
   },
 
   identifyCompany: function (req, res) {
+    if (req.headers['x-company-id']) {
+      return req.headers['x-company-id']
+    }
     if (req.headers['my-company-id']) {
-
       return req.headers['my-company-id'];
     }
     return undefined;
@@ -42,7 +50,8 @@ var moesifOptions = {
   getMetadata: function (req, res) {
     return {
       foo: 'express',
-      bar: 'example'
+      bar: 'example',
+      my_date_field: (new Date()).toISOString()
     }
   },
 
@@ -53,17 +62,25 @@ var moesifOptions = {
   // modify the option below to test out limits for responseMaxBodySize
   responseMaxBodySize: 5000,
 
+  maxOutgoingTimeout: 10,
+
   callback: function (error, data) {
     console.log('inside call back');
     console.log('error: ' + JSON.stringify(error));
   }
 };
 
+moesifOptions.maskContent = function (event) {
+  console.log('event before masking' + JSON.stringify(event));
+  const newEvent = _.omit(event, ['request.headers.authorization']);
+  console.log('event after masking' + JSON.stringify(newEvent));
+  return newEvent;
+}
 
 var moesifMiddleware = moesif(moesifOptions);
 
 app.use(moesifMiddleware);
-moesifMiddleware.startCaptureOutgoing();
+// moesifMiddleware.startCaptureOutgoing();
 
 app.get('/', function (req, res) {
   console.log(req.body);
@@ -145,11 +162,51 @@ proxyRoute.use('/', (req, res) => {
   });
 });
 
+var governanceRoutes = express.Router();
+
+governanceRoutes.get('/no_italy', (req, res) => {
+  res.status(200).send({
+    success: true
+  });
+});
+
+governanceRoutes.get('/company1', (req, res) => {
+  res.status(200).send({
+    success: true
+  });
+});
+
+
+governanceRoutes.get('/canada', (req, res) => {
+  res.status(200).send({
+    success: true
+  });
+});
+
+governanceRoutes.get('/cairo', (req, res) => {
+  res.status(200).send({
+    success: true
+  });
+});
+
+governanceRoutes.get('/for_companies_in_japan_only', (req, res) => {
+  res.status(200).send({
+    success: true
+  });
+});
+
+governanceRoutes.get('/random', (req, res) => {
+  res.status(200).send({
+    success: true
+  });
+});
+
 
 app.use('/api', router);
 
 app.use('/proxy', proxyRoute);
 
+app.use('/gov', governanceRoutes);
 
 app.listen(port, function() {
   console.log('Example app is listening on port ' + port);
