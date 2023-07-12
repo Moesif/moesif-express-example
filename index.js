@@ -4,11 +4,10 @@ var app = express();
 var superagent = require('superagent');
 var _ = require('lodash');
 
-// process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
 var httpProxy = require('http-proxy');
 
-// var moesif = require('moesif-nodejs');
-var moesif = require('../moesif-nodejs/lib');
+var moesif = require('moesif-nodejs');
+
 
 var port = process.env.PORT || 5050
 
