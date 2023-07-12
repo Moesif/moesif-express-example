@@ -25,15 +25,20 @@ var moesifOptions = {
     if (req.user) {
       return req.user.id;
     }
+    if (req.headers['x-user-id']) {
+      return req.headers['x-user-id'];
+    }
     if (req.headers['my-user-id']) {
       return req.headers['my-user-id'];
     }
-    return 'abc_my_name';
+    return undefined;
   },
 
   identifyCompany: function (req, res) {
+    if (req.headers['x-company-id']) {
+      return req.headers['x-company-id']
+    }
     if (req.headers['my-company-id']) {
-
       return req.headers['my-company-id'];
     }
     return undefined;
@@ -158,11 +163,51 @@ proxyRoute.use('/', (req, res) => {
   });
 });
 
+var governanceRoutes = express.Router();
+
+governanceRoutes.get('/no_italy', (req, res) => {
+  res.status(200).send({
+    success: true
+  });
+});
+
+governanceRoutes.get('/company1', (req, res) => {
+  res.status(200).send({
+    success: true
+  });
+});
+
+
+governanceRoutes.get('/canada', (req, res) => {
+  res.status(200).send({
+    success: true
+  });
+});
+
+governanceRoutes.get('/cairo', (req, res) => {
+  res.status(200).send({
+    success: true
+  });
+});
+
+governanceRoutes.get('/for_companies_in_japan_only', (req, res) => {
+  res.status(200).send({
+    success: true
+  });
+});
+
+governanceRoutes.get('/random', (req, res) => {
+  res.status(200).send({
+    success: true
+  });
+});
+
 
 app.use('/api', router);
 
 app.use('/proxy', proxyRoute);
 
+app.use('/gov', governanceRoutes);
 
 app.listen(port, function() {
   console.log('Example app is listening on port ' + port);
