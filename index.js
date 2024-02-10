@@ -7,7 +7,7 @@ var _ = require('lodash');
 var httpProxy = require('http-proxy');
 
 var moesif = require('moesif-nodejs');
-
+// var moesif = require('../moesif-nodejs/lib/index');
 
 var port = process.env.PORT || 5050
 
@@ -16,7 +16,7 @@ var moesifOptions = {
 
   applicationId: process.env.MOESIF_APPLICATION_ID || 'Your Moesif Application Id',
 
-  baseUri: 'https://api.moesif.net',
+  // baseUri: 'https://api-dev.moesif.net',
 
   debug: true,
 
@@ -113,6 +113,15 @@ router.get('/', function(req, res) {
 });
 
 router.post('/large', function(req, res) {
+  // moesifMiddleware.updateSubscription({
+  //   subscriptionId: "test-nodejs",
+  //   companyId: "test-nodejs2",
+  //   status: "active",
+  // }).then((result) => {
+  //   console.log("subscription updated successfully", result);
+  // }).catch((err) => {
+  //   console.error("Error updating subscription", err);
+  // });
   console.log('req body in customer api');
   console.log(req.body);
   res.json({ message: 'post successful'})
@@ -195,7 +204,19 @@ governanceRoutes.get('/for_companies_in_japan_only', (req, res) => {
   });
 });
 
+governanceRoutes.get('/no_germany_companies_allowed', (req, res) => {
+  res.status(200).send({
+    success: true
+  });
+});
+
 governanceRoutes.get('/random', (req, res) => {
+  res.status(200).send({
+    success: true
+  });
+});
+
+governanceRoutes.get('/header_match', (req, res) => {
   res.status(200).send({
     success: true
   });

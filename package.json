@@ -21,7 +21,7 @@
     "express": "^4.18.2",
     "http-proxy": "^1.18.1",
     "lodash": "^4.17.21",
-    "moesif-nodejs": "^3.5.1",
+    "moesif-nodejs": "^3.5.8",
     "superagent": "^8.0.9"
   },
   "engines": {
