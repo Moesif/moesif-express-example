@@ -14,7 +14,7 @@ var port = process.env.PORT || 5050
 // Set the options, the only required field is applicationId.
 var moesifOptions = {
 
-  applicationId: process.env.MOESIF_APPLICATION_ID || 'Your Moesif Application Id',
+  applicationId: process.env.MOESIF_APPLICATION_ID || 'Your Application Id',
 
   // baseUri: 'https://api-dev.moesif.net',
 
@@ -62,7 +62,7 @@ var moesifOptions = {
   // modify the option below to test out limits for responseMaxBodySize
   responseMaxBodySize: 5000,
 
-  maxOutgoingTimeout: 10,
+  maxOutgoingTimeout: 1000,
 
   callback: function (error, data) {
     console.log('inside call back');
@@ -70,12 +70,14 @@ var moesifOptions = {
   }
 };
 
-moesifOptions.maskContent = function (event) {
-  console.log('event before masking' + JSON.stringify(event));
-  const newEvent = _.omit(event, ['request.headers.authorization']);
-  console.log('event after masking' + JSON.stringify(newEvent));
-  return newEvent;
-}
+console.table(moesifOptions);
+
+// moesifOptions.maskContent = function (event) {
+//   console.log('event before masking' + JSON.stringify(event));
+//   const newEvent = _.omit(event, ['request.headers.authorization']);
+//   console.log('event after masking' + JSON.stringify(newEvent));
+//   return newEvent;
+// }
 
 var moesifMiddleware = moesif(moesifOptions);
 
@@ -110,6 +112,11 @@ router.get('/', function(req, res) {
   console.log('req body in customer api');
   console.log(req.body);
   res.json({ message: 'first json api'});
+});
+
+router.post('/body-with-null', function(req, res) {
+  console.log('req body is' + req.body);
+  res.json({ message: 'first json api', should_null: null});
 });
 
 router.post('/large', function(req, res) {
@@ -217,6 +224,12 @@ governanceRoutes.get('/random', (req, res) => {
 });
 
 governanceRoutes.get('/header_match', (req, res) => {
+  res.status(200).send({
+    success: true
+  });
+});
+
+governanceRoutes.get('/behavior', (req, res) => {
   res.status(200).send({
     success: true
   });
